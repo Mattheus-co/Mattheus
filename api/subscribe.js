@@ -15,7 +15,7 @@ export default async function handler(req, res) {
       headers: {
         'Content-Type': 'application/json',
         'revision': '2023-10-15',
-        Authorization: `Klaviyo-API-Key ${process.env.KLAYIYO_API_KEY}`
+        'Authorization': `Klaviyo-API-Key ${process.env.KLAYIYO_API_KEY}`
       },
       body: JSON.stringify({
         data: {
