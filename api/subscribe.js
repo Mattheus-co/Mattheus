@@ -37,8 +37,7 @@ export default async function handler(req, res) {
             list: {
               data: {
                 type: 'list',
-                id: 'WdFqJp' // Move list_id
-            here
+                id: 'WdFqJp' // Move list_id here
               }
             }
           }
