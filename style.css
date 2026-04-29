@@ -180,12 +180,12 @@ button:hover .arrow-icon {
 
 .success-message {
     position: absolute;
-    top: 130%;
+    top: 50%;
     left: 0;
     width: 100%;
     text-align: center;
-    color: var(--text-color);
-    font-size: 1.1rem;
+    color: rgba(43, 48, 54, 0.7);
+    font-size: 1.15rem;
     font-weight: 300;
     opacity: 0;
     visibility: hidden;
@@ -247,8 +247,8 @@ button:hover .arrow-icon {
     }
 
     .success-message {
-        font-size: 1rem;
-        top: 115%;
+        font-size: 1.1rem;
+        top: 50%;
     }
 }
 
