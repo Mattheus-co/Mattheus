@@ -183,7 +183,7 @@ button:hover {
 @media (max-width: 600px) {
 
     .brand-logo {
-        width: 200px; /* groter logo */
+        width: 250px; /* groter logo */
         margin-bottom: 2rem;
     }
 
