@@ -184,9 +184,9 @@ button:hover .arrow-icon {
     left: 0;
     width: 100%;
     text-align: center;
-    color: var(--accent-color);
+    color: var(--text-color);
     font-size: 1.1rem;
-    font-weight: 400;
+    font-weight: 300;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-15px);
