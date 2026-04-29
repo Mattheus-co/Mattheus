@@ -32,6 +32,15 @@ export default async function handler(req, res) {
                 }
               ]
             }
+          },
+          relationships: {
+            list: {
+              data: {
+                type: 'list',
+                id: 'WdFqJp' // Move list_id
+            here
+              }
+            }
           }
         }
       })
