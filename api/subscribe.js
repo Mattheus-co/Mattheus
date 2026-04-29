@@ -21,7 +21,6 @@ export default async function handler(req, res) {
         data: {
           type: 'profile-subscription-bulk-create-job',
           attributes: {
-            list_id: 'WdFqJp',
             profiles: {
               data: [
                 {
