@@ -209,11 +209,13 @@ button:hover .arrow-icon {
 
     .brand-logo {
         width: 100%;
-        max-width: 600px; /* Verhoogd voor grotere weergave */
-        margin-bottom: 1rem;
-        /* Iets zachtere maskering voor mobiel om te voorkomen dat het logo verdwijnt */
-        -webkit-mask-image: radial-gradient(ellipse 90% 85% at center, black 60%, transparent 100%);
-        mask-image: radial-gradient(ellipse 90% 85% at center, black 60%, transparent 100%);
+        max-width: 500px;
+        margin-bottom: 0.5rem;
+        /* Inzoomen om witruimte in het bestand te compenseren */
+        transform: scale(1.4); 
+        /* Masker iets aanpassen voor de grotere schaal */
+        -webkit-mask-image: radial-gradient(ellipse 80% 70% at center, black 50%, transparent 100%);
+        mask-image: radial-gradient(ellipse 80% 70% at center, black 50%, transparent 100%);
     }
 
     .subtitle {
@@ -253,7 +255,8 @@ button:hover .arrow-icon {
 /* Extra kleine schermen (telefoons) */
 @media (max-width: 480px) {
     .brand-logo {
-        max-width: 400px; /* Verhoogd voor extra kleine schermen */
+        transform: scale(1.6); /* Iets meer zoom op de allerkleinste schermen */
+        margin-bottom: 1.5rem;
     }
     
     .subtitle {
