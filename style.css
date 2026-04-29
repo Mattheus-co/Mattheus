@@ -197,4 +197,26 @@ button:hover .arrow-icon {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
+
+    /* 📱 MOBILE FIX */
+@media (max-width: 600px) {
+
+    .brand-logo {
+        width: 200px; /* groter logo */
+        margin-bottom: 2rem;
+    }
+
+    .subtitle {
+        font-size: 14px;
+        margin-bottom: 2rem;
+    }
+
+    input[type="email"] {
+        padding: 14px;
+        font-size: 16px;
+    }
+
+    button {
+        padding: 10px 12px;
+        font-size: 14px;
 }
