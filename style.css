@@ -198,35 +198,64 @@ button:hover .arrow-icon {
     visibility: visible;
     transform: translateY(0);
     
-@media (max-width: 600px) {
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .container {
+        padding: 1.5rem;
+        justify-content: center;
+        min-height: 100vh;
+    }
 
-  /* 🔥 Logo iets groter */
-  .brand-logo {
-    width: 220px;
-  }
+    .brand-logo {
+        width: 100%;
+        max-width: 450px;
+        margin-bottom: 0.5rem;
+        /* Iets scherpere maskering voor mobiel */
+        -webkit-mask-image: radial-gradient(ellipse 95% 95% at center, black 50%, transparent 100%);
+        mask-image: radial-gradient(ellipse 95% 95% at center, black 50%, transparent 100%);
+    }
 
-  /* 🔥 Input iets compacter zodat knop beter past */
-  input[type="email"] {
-    padding: 1rem 1.2rem;
-    font-size: 16px;
-  }
+    .subtitle {
+        font-size: 1rem;
+        line-height: 1.5;
+        margin-bottom: 2.5rem;
+        padding: 0 10px;
+        opacity: 0.8;
+    }
 
-  /* 🔥 Knop iets minder breed + naar links */
-  button {
-    padding: 0 1.2rem;
-    font-size: 0.95rem;
-  }
+    .input-group {
+        flex-direction: column; /* Stapelt de input en knop */
+        padding: 0.4rem;
+        gap: 0.5rem;
+        border-radius: 4px;
+    }
 
-  /* 🔥 Zorg dat knop niet “uit de balk valt” */
-  .input-group {
-    padding: 0.3rem;
-  }
+    input[type="email"] {
+        padding: 1.1rem;
+        font-size: 1rem;
+        text-align: center;
+    }
 
-  /* 🔥 Alleen op mobiel: tekst netjes breken */
-  button span {
-    display: block;
-    line-height: 1.1;
-    text-align: center;
-  }
+    button {
+        width: 100%;
+        justify-content: center;
+        padding: 1.1rem;
+        font-size: 1rem;
+    }
+
+    .success-message {
+        font-size: 1rem;
+        top: 115%;
+    }
 }
 
+/* Extra kleine schermen (telefoons) */
+@media (max-width: 480px) {
+    .brand-logo {
+        max-width: 320px;
+    }
+    
+    .subtitle {
+        font-size: 0.95rem;
+    }
+}
