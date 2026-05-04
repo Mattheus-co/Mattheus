@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
             btn.innerHTML = originalText;
             btn.disabled = false;
 
-            alert("Er ging iets mis. Probeer opnieuw.");
+            alert("Something went wrong. Try again.");
         }
     });
 });
