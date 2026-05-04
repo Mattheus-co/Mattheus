@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Button loading state
         const originalText = btn.innerHTML;
-        btn.innerHTML = '<span style="opacity: 0.8;">Verzenden...</span>';
+        btn.innerHTML = '<span style="opacity: 0.8;">Sending...</span>';
         btn.disabled = true;
 
         try {
