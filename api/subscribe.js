@@ -1,59 +1,90 @@
+// Vercel serverless function — POST /api/subscribe
+//
+// Environment variables (Vercel > Settings > Environment Variables):
+//   KLAVIYO_PRIVATE_KEY   pk_xxxxxxxx   (server side only, never exposed)
+//   KLAVIYO_LIST_ID       XxXxXx        (the waitlist)
+//
+// Returns { ok: true, position: <n> } so the page can show "No. 0042".
+// If the count cannot be read the position is simply omitted.
+
+const REVISION = '2024-10-15';
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
+    res.setHeader('Allow', 'POST');
+    return res.status(405).json({ error: 'method_not_allowed' });
   }
 
-  const { email } = req.body;
+  const key = process.env.KLAVIYO_PRIVATE_KEY;
+  const listId = process.env.KLAVIYO_LIST_ID;
+  if (!key || !listId) return res.status(500).json({ error: 'not_configured' });
 
-  if (!email) {
-    return res.status(400).json({ message: 'Email is required' });
+  let email = '';
+  try {
+    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
+    email = String(body.email || '').trim().toLowerCase();
+  } catch (_) {
+    return res.status(400).json({ error: 'bad_request' });
   }
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(email) || email.length > 254) {
+    return res.status(400).json({ error: 'invalid_email' });
+  }
+
+  const headers = {
+    'Authorization': `Klaviyo-API-Key ${key}`,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'revision': REVISION,
+  };
 
   try {
-    const response = await fetch('https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs/', {
+    // Subscribe with consent. Idempotent: re-submitting the same address is fine.
+    const r = await fetch('https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'revision': '2023-10-15',
-        'Authorization': `Klaviyo-API-Key ${process.env.KLAVIYO_API_KEY}`
-      },
+      headers,
       body: JSON.stringify({
         data: {
           type: 'profile-subscription-bulk-create-job',
           attributes: {
             profiles: {
-              data: [
-                {
-                  type: 'profile',
-                  attributes: {
-                    email: email
-                  }
-                }
-              ]
-            }
+              data: [{
+                type: 'profile',
+                attributes: {
+                  email,
+                  subscriptions: { email: { marketing: { consent: 'SUBSCRIBED' } } },
+                },
+              }],
+            },
+            historical_import: false,
           },
-          relationships: {
-            list: {
-              data: {
-                type: 'list',
-                id: 'RkQU3s' // Move list_id here
-              }
-            }
-          }
-        }
-      })
+          relationships: { list: { data: { type: 'list', id: listId } } },
+        },
+      }),
     });
 
-    if (!response.ok) {
-      const text = await response.text();
-      console.error("Klaviyo error:", text);
-      return res.status(500).json({ message: text });
+    if (!r.ok) {
+      const detail = await r.text();
+      console.error('klaviyo subscribe failed', r.status, detail.slice(0, 500));
+      return res.status(502).json({ error: 'upstream' });
     }
-
-    return res.status(200).json({ message: 'Subscribed!' });
-
-  } catch (error) {
-    console.error("Server error:", error);
-    return res.status(500).json({ message: error.message });
+  } catch (err) {
+    console.error('klaviyo subscribe threw', err);
+    return res.status(502).json({ error: 'upstream' });
   }
+
+  // Best effort: the waitlist position. Never fail the signup over this.
+  let position;
+  try {
+    const c = await fetch(
+      `https://a.klaviyo.com/api/lists/${listId}?additional-fields[list]=profile_count`,
+      { headers }
+    );
+    if (c.ok) {
+      const j = await c.json();
+      const n = j?.data?.attributes?.profile_count;
+      if (Number.isFinite(n)) position = n;
+    }
+  } catch (_) { /* ignore */ }
+
+  return res.status(200).json({ ok: true, position });
 }
