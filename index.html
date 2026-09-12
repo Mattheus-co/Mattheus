@@ -175,7 +175,6 @@
   button:disabled{opacity:.35;cursor:default}
   .status{
     position:absolute;left:0;right:0;top:calc(100% + 22px);
-    text-align:center;
     font-size:13px;letter-spacing:.02em;color:rgba(30,42,58,.65);
     opacity:0;transform:translateY(-6px);
     transition:opacity .9s var(--ease),transform .9s var(--ease);
@@ -439,7 +438,14 @@
       });
     })).then(function(j){
       f.classList.add('done');
-      say('Confirmed. You are on the waitlist.');
+      var EDITION = 50;
+      if(j.position && j.position <= EDITION){
+        say('Confirmed. No. ' + String(j.position).padStart(2,'0') + ' of ' + EDITION + '.');
+      } else if(j.position){
+        say('Confirmed. You are on the waitlist.');
+      } else {
+        say('Confirmed.');
+      }
     }).catch(function(){
       b.disabled=false;
       say('Something went wrong. Try again.', true);
