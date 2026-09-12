@@ -22,7 +22,7 @@ automatically; no `vercel.json` needed.
 | Mattheus Navy `#1E2A3A`, 60-70% | Screen 1, full bleed |
 | Sail `#F6F1E7`, 20-30% | The wordmark on navy |
 | Paper `#F2EEE3` | Screen 2 ground, a half step warmer than Sail |
-| H3 / Product title | "The first release is numbered and limited." at 24-32px, -0.01em |
+| H3 / Product title | "The first release is limited to 50 pieces." at 24-32px, -0.01em |
 | Small / Caption | Footer at 13px, +0.02em, sentence case |
 | Button / UI | "Request access" at 14px, 500, +0.02em |
 
@@ -59,18 +59,26 @@ Vercel > Project > Settings > Environment Variables:
 | Name | Value |
 | --- | --- |
 | `KLAVIYO_PRIVATE_KEY` | `pk_...` (private key) |
-| `KLAVIYO_LIST_ID` | `WdFqJp` (the account's Email List, single opt in) |
+| `KLAVIYO_LIST_ID` | the waitlist's list ID, single opt in, no existing profiles |
 
 The key stays server side; the browser never talks to Klaviyo directly. Create
 the key in Klaviyo under Settings > API keys with only `List` read and write,
 `Profiles` write, and `Subscriptions` write.
 
-`POST /api/subscribe` returns `{ ok: true, position: 41 }` and the page renders
-`Confirmed. No. 0041`. List `WdFqJp` already held 5 profiles when this was wired
-up, so the first new signup reads `No. 0006`. Use a fresh list if the numbering
-has to start at one. The number is the list's profile count, read after the
-write, and it is best effort. It is not a reservation, so if you later promise
-the first 50 signups a numbered piece you have to reconcile that by hand.
+`POST /api/subscribe` returns `{ ok: true, position: 41 }`, which is the list's
+profile count read after the write. The page turns that into `Confirmed. No. 41
+of 50` for the first fifty and `Confirmed. You are on the waitlist.` after that,
+so the page never promises a numbered piece it cannot deliver. The edition size
+is the `EDITION` constant in the page script; it has to match the copy on screen.
+
+The count is best effort and it is not a reservation. Two people submitting in
+the same second can both read the same number, and nothing stops the fifty-first
+signup, it just gets the generic message. If a number is going to become a
+commitment, take the order of `joined_at` in Klaviyo as the truth, not this.
+
+The list must be a **clean, dedicated** one for these numbers to mean anything.
+Point `KLAVIYO_LIST_ID` at a list with existing profiles and the first signup
+reads whatever that count already was.
 
 ## Still open
 

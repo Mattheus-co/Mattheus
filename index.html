@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Mattheus. The first release is numbered and limited.">
+<meta name="description" content="Mattheus. The first release is limited to 50 pieces.">
 <meta name="theme-color" content="#1E2A3A">
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta property="og:title" content="Mattheus Co.">
-<meta property="og:description" content="The first release is numbered and limited.">
+<meta property="og:description" content="The first release is limited to 50 pieces.">
 <meta property="og:image" content="/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <title>Mattheus Co.</title>
@@ -370,7 +370,7 @@
 
 <!-- 2 · access -->
 <section id="access">
-  <p class="h3 r">The first release is numbered and limited.</p>
+  <p class="h3 r">The first release is limited to 50 pieces.</p>
   <form class="r d2" id="f" novalidate>
     <div class="field">
       <input id="e" type="email" name="email" placeholder="Email address" autocomplete="email" required aria-label="Email address">
@@ -438,7 +438,14 @@
       });
     })).then(function(j){
       f.classList.add('done');
-      say(j.position ? 'Confirmed. No. ' + String(j.position).padStart(4,'0') : 'Confirmed.');
+      var EDITION = 50;
+      if(j.position && j.position <= EDITION){
+        say('Confirmed. No. ' + String(j.position).padStart(2,'0') + ' of ' + EDITION + '.');
+      } else if(j.position){
+        say('Confirmed. You are on the waitlist.');
+      } else {
+        say('Confirmed.');
+      }
     }).catch(function(){
       b.disabled=false;
       say('Something went wrong. Try again.', true);
